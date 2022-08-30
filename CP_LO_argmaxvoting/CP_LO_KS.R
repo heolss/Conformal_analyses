@@ -5,18 +5,15 @@ library("knitr")
 library("dplyr")
 library("ggplot2")
 library("gridExtra")
-source("Programs/functions.R")
+source("functions.R")
 
 ## Original Data
-df_test <- read.csv(file = file.path('Data', 'Derived', 'CP_LO', 'df_ks.csv'))
-df_ks1 <- read.csv(file = file.path('Data', 'Derived', 'conformal_20200225', 'df_KS1.csv'))
-df_KS1_CGAN <- read.csv(file = file.path('Data', 'Derived', 'conformal_20200225', 'df_KS1_CGAN.csv'))
+df_test <- read.csv(file = file.path('Data', 'Demo', 'df_ks.csv'))
 
 ########################################################################################
 ## Set Parameters
 ########################################################################################
 normalize <- FALSE
-ratioTrain = 0.5
 write_output <- FALSE 
 use_testsplit <- FALSE
 
@@ -27,10 +24,10 @@ use_testsplit <- FALSE
 ########################################################################################
 if (use_testsplit){
   # II. Add test-split from I.
-  df_calib <- read.csv(file = file.path('Data', 'Derived', 'CP_LO_argmaxvoting', 'df_test.csv'))
+  df_calib <- read.csv(file = file.path('Data', 'Demo', 'df_test.csv'))
   df_calib <- filter(df_calib, calibset == 1)
 } else {
-  df_calib <- read.csv(file = file.path('Data', 'Derived', 'CP_LO_argmaxvoting', 'df_test.csv'))
+  df_calib <- read.csv(file = file.path('Data', 'Demo', 'df_test.csv'))
 }
 
 ########################################################################################
@@ -56,12 +53,6 @@ if (normalize){
 }
 
 ########################################################################################
-## Confusion matrix and Accuracy
-########################################################################################
-caret::confusionMatrix(factor(df_calib$ISUP), factor(df_calib$cl_slide_isup)); vcd::Kappa(table(df_calib$ISUP, df_calib$cl_slide_isup))
-caret::confusionMatrix(factor(df_test$ISUP), factor(df_test$cl_slide_isup)); vcd::Kappa(table(df_test$ISUP, df_test$cl_slide_isup))
-
-########################################################################################
 ## Generate Output for TestData
 ########################################################################################
 ## CX
@@ -83,18 +74,13 @@ tab01 <- tab_predict_region(df_pred01)
 tab05 <- tab_predict_region(df_pred05)
 tab1 <- tab_predict_region(df_pred1)
 if (write_output){
-  write.table(tab01, file = file.path('Output', 'Tables', 'PredictionSets', 'ks_CX.csv'))
-  write.table(tab05, file = file.path('Output', 'Tables', 'PredictionSets', 'ks_CX.csv'), append = TRUE)
-  write.table(tab1, file = file.path('Output', 'Tables', 'PredictionSets', 'ks_CX.csv'), append = TRUE)
+  write.table(tab01, file = file.path('Output', 'Tables', 'ks_CX.csv'))
+  write.table(tab05, file = file.path('Output', 'Tables', 'ks_CX.csv'), append = TRUE)
+  write.table(tab1, file = file.path('Output', 'Tables', 'ks_CX.csv'), append = TRUE)
   # Cancer-detection plot
-  # cx <- cx + ggtitle("New scanner & New Lab")
-  # ggsave(filename = file.path('Output', 'Plots', 'calibration', 'cx_ks.png'), cx, 
-  #        width = 2, 
-  #        height = 2)
-  # Increase font-size
   cx <- cx + theme(text = element_text(size = 17))
   cx <- cx + ggtitle("")
-  ggsave(filename = file.path('Output', 'Plots', 'calibration', 'nolabels', 'cx_ks.png'), cx, 
+  ggsave(filename = file.path('Output', 'Figures', 'cx_ks.png'), cx, 
          width = 6, 
          height = 6)
 }
@@ -121,10 +107,10 @@ tab10 <- tab_predict_region(df_pred10)
 tab20 <- tab_predict_region(df_pred20)
 tab33 <- tab_predict_region(df_pred33)
 if (write_output){
-  write.table(tab05, file = file.path('Output', 'Tables', 'PredictionSets', 'ks_ISUP.csv'))
-  write.table(tab10, file = file.path('Output', 'Tables', 'PredictionSets', 'ks_ISUP.csv'), append = TRUE)
-  write.table(tab20, file = file.path('Output', 'Tables', 'PredictionSets', 'ks_ISUP.csv'), append = TRUE)
-  write.table(tab33, file = file.path('Output', 'Tables', 'PredictionSets', 'ks_ISUP.csv'), append = TRUE)
+  write.table(tab05, file = file.path('Output', 'Tables', 'ks_ISUP.csv'))
+  write.table(tab10, file = file.path('Output', 'Tables', 'ks_ISUP.csv'), append = TRUE)
+  write.table(tab20, file = file.path('Output', 'Tables', 'ks_ISUP.csv'), append = TRUE)
+  write.table(tab33, file = file.path('Output', 'Tables', 'ks_ISUP.csv'), append = TRUE)
 }
 tab05;tab10;tab20;tab33
 
@@ -138,9 +124,9 @@ multi20 <- predgroups(df_pred20)
 multi33 <- predgroups(df_pred33)
 
 if (write_output){
-  write.table(multi10, file = file.path('Output', 'Tables', 'PredictionSets', 'multiset_ks.csv'))
-  write.table(multi20, file = file.path('Output', 'Tables', 'PredictionSets', 'multiset_ks.csv'), append = TRUE)
-  write.table(multi33, file = file.path('Output', 'Tables', 'PredictionSets', 'multiset_ks.csv'), append = TRUE)
+  write.table(multi10, file = file.path('Output', 'Tables', 'multiset_ks.csv'))
+  write.table(multi20, file = file.path('Output', 'Tables', 'multiset_ks.csv'), append = TRUE)
+  write.table(multi33, file = file.path('Output', 'Tables', 'multiset_ks.csv'), append = TRUE)
 }
 
 ################################## end of program #################################

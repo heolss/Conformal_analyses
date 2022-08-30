@@ -5,25 +5,15 @@ library("knitr")
 library("dplyr")
 library("ggplot2")
 library("gridExtra")
-source("Programs/functions.R")
+source("functions.R")
 
 ## Original Data
-df_test <- read.csv(file = file.path('Data', 'Derived', 'CP_LO_argmaxvoting', 'df_imagebase.csv'))
-df_ks1 <- read.csv(file = file.path('Data', 'Derived', 'conformal_20200225', 'df_KS1.csv'))
-df_KS1_CGAN <- read.csv(file = file.path('Data', 'Derived', 'conformal_20200225', 'df_KS1_CGAN.csv'))
-
-# Evaluate against the mode ISUP assessment of the 23 pathologists in the Imagebase-panel
-imagebase <- read.csv(file = file.path('Data', 'Derived', 'CP_LO', 'FinalResultsProstate_with_AI_anonymized.csv'))
-df_test <- left_join(df_test, select(imagebase, c(Path.no, MODE, Consensus)), by = c("slide" = "Path.no"))
-df_test <- filter(df_test, !is.na(MODE))
-df_test$ISUP <- df_test$MODE
-df_test <- df_test[order(df_test$slide),]
+df_test <- read.csv(file = file.path('Data', 'Demo', 'df_imagebase.csv'))
 
 ########################################################################################
 ## Set Parameters
 ########################################################################################
 normalize <- FALSE
-ratioTrain = 0.5
 write_output <- FALSE 
 use_testsplit <- FALSE
 
@@ -32,10 +22,10 @@ use_testsplit <- FALSE
 ########################################################################################
 if (use_testsplit){
   # II. Add test-split from I.
-  df_calib <- read.csv(file = file.path('Data', 'Derived', 'CP_LO_argmaxvoting', 'df_test.csv'))
+  df_calib <- read.csv(file = file.path('Data', 'Demo', 'df_test.csv'))
   df_calib <- filter(df_calib, calibset == 1)
 } else {
-  df_calib <- read.csv(file = file.path('Data', 'Derived', 'CP_LO_argmaxvoting', 'df_test.csv'))
+  df_calib <- read.csv(file = file.path('Data', 'Demo', 'df_test.csv'))
 }
 
 ########################################################################################
@@ -61,12 +51,6 @@ if (normalize){
 }
 
 ########################################################################################
-## Confusion matrix and Accuracy
-########################################################################################
-caret::confusionMatrix(factor(df_calib$cl_slide_isup), factor(df_calib$ISUP)); vcd::Kappa(table(df_calib$ISUP, df_calib$cl_slide_isup))
-caret::confusionMatrix(factor(df_test$cl_slide_isup), factor(df_test$ISUP)); vcd::Kappa(table(df_test$ISUP, df_test$cl_slide_isup))
-
-########################################################################################
 ## Generate Output for TestData
 ########################################################################################
 ## CX
@@ -89,9 +73,9 @@ tab01 <- tab_predict_region(df_pred01)
 tab05 <- tab_predict_region(df_pred05)
 tab1 <- tab_predict_region(df_pred1)
 if (write_output){
-  write.table(tab01, file = file.path('Output', 'Tables', 'PredictionSets', 'iamgebase_CX.csv'))
-  write.table(tab05, file = file.path('Output', 'Tables', 'PredictionSets', 'iamgebase_CX.csv'), append = TRUE)
-  write.table(tab1, file = file.path('Output', 'Tables', 'PredictionSets', 'iamgebase_CX.csv'), append = TRUE)
+  write.table(tab01, file = file.path('Output', 'Tables', 'iamgebase_CX.csv'))
+  write.table(tab05, file = file.path('Output', 'Tables', 'iamgebase_CX.csv'), append = TRUE)
+  write.table(tab1, file = file.path('Output', 'Tables', 'iamgebase_CX.csv'), append = TRUE)
 }
 tab01;tab05;tab1
 
@@ -117,10 +101,10 @@ tab10 <- tab_predict_region(df_pred10)
 tab20 <- tab_predict_region(df_pred20)
 tab33 <- tab_predict_region(df_pred33)
 if (write_output){
-  write.table(tab05, file = file.path('Output', 'Tables', 'PredictionSets', 'iamgebase_ISUP.csv'))
-  write.table(tab10, file = file.path('Output', 'Tables', 'PredictionSets', 'iamgebase_ISUP.csv'), append = TRUE)
-  write.table(tab20, file = file.path('Output', 'Tables', 'PredictionSets', 'iamgebase_ISUP.csv'), append = TRUE)
-  write.table(tab33, file = file.path('Output', 'Tables', 'PredictionSets', 'iamgebase_ISUP.csv'), append = TRUE)
+  write.table(tab05, file = file.path('Output', 'Tables', 'iamgebase_ISUP.csv'))
+  write.table(tab10, file = file.path('Output', 'Tables', 'iamgebase_ISUP.csv'), append = TRUE)
+  write.table(tab20, file = file.path('Output', 'Tables', 'iamgebase_ISUP.csv'), append = TRUE)
+  write.table(tab33, file = file.path('Output', 'Tables', 'iamgebase_ISUP.csv'), append = TRUE)
 }
 tab05;tab10;tab20;tab33
 
@@ -134,9 +118,11 @@ multi20 <- predgroups(df_pred20)
 multi33 <- predgroups(df_pred33)
 
 if (write_output){
-  write.table(multi10, file = file.path('Output', 'Tables', 'PredictionSets', 'multiset_IMB.csv'))
-  write.table(multi20, file = file.path('Output', 'Tables', 'PredictionSets', 'multiset_IMB.csv'), append = TRUE)
-  write.table(multi33, file = file.path('Output', 'Tables', 'PredictionSets', 'multiset_IMB.csv'), append = TRUE)
+  write.table(multi10, file = file.path('Output', 'Tables', 'multiset_iamgebase.csv'))
+  write.table(multi20, file = file.path('Output', 'Tables', 'multiset_iamgebase.csv'),
+              append = TRUE)
+  write.table(multi33, file = file.path('Output', 'Tables', 'multiset_iamgebase.csv'),
+              append = TRUE)
 }
 
 ################################## end of program #################################

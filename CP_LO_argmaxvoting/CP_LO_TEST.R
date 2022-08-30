@@ -5,19 +5,15 @@ library("knitr")
 library("dplyr")
 library("ggplot2")
 library("gridExtra")
-source("Programs/functions.R")
+source("functions.R")
 
 ## Original Data
-# df_calib <- read.csv(file = file.path('/Users/henrikolsson1/Desktop/Sandbox/Transport/CP-LO', 'df_train.csv'))
-df_ks1 <- read.csv(file = file.path('Data', 'Derived', 'conformal_20200225', 'df_KS1.csv'))
-df_KS1_CGAN <- read.csv(file = file.path('Data', 'Derived', 'conformal_20200225', 'df_KS1_CGAN.csv'))
-df_test <- read.csv(file = file.path('Data', 'Derived', 'CP_LO_argmaxvoting', 'df_test.csv'))
+df_test <- read.csv(file = file.path('Data', 'Demo', 'df_test.csv'))
 
 ########################################################################################
 ## Set Parameters
 ########################################################################################
 normalize <- FALSE
-ratioTrain <- 0.5
 create_testsplit <- FALSE
 write_output <- FALSE 
 
@@ -32,7 +28,7 @@ if (create_testsplit){
   ids <- sample(unique(df_test$man), 123)
   df_calib <- df_test[df_test$man %in% ids, ]
   df_test$calibset <- ifelse(df_test$man %in% ids, 0, 1)
-  write.csv(df_test, file = file.path('Data', 'Derived', 'CP_LO', 'df_test.csv'))
+  write.csv(df_test, file = file.path('Data', 'Demo', 'df_test.csv'))
 }
 
 # II. Add test-split from I.
@@ -62,14 +58,6 @@ if (normalize){
 }
 
 ########################################################################################
-## Confusion matrix and AUC of AI point predictions
-########################################################################################
-caret::confusionMatrix(factor(df_calib$cl_slide_isup), factor(df_calib$ISUP)); vcd::Kappa(table(df_calib$ISUP, df_calib$cl_slide_isup))
-caret::confusionMatrix(factor(df_test$cl_slide_isup), factor(df_test$ISUP)); vcd::Kappa(table(df_test$ISUP, df_test$cl_slide_isup))
-
-with(df_calib, roc(cx, pr_cx)); with(df_test, roc(cx, pr_cx))
-
-########################################################################################
 ## Generate Multi-label Output for TestData
 ########################################################################################
 ## CX
@@ -92,9 +80,9 @@ tab01 <- tab_predict_region(df_pred01)
 tab05 <- tab_predict_region(df_pred05)
 tab1 <- tab_predict_region(df_pred1)
 if (write_output){
-  write.table(tab01, file = file.path('Output', 'Tables', 'PredictionSets', 'test_CX.csv'))
-  write.table(tab05, file = file.path('Output', 'Tables', 'PredictionSets', 'test_CX.csv'), append = TRUE)
-  write.table(tab1, file = file.path('Output', 'Tables', 'PredictionSets', 'test_CX.csv'), append = TRUE)
+  write.table(tab01, file = file.path('Output', 'Tables', 'test_CX.csv'))
+  write.table(tab05, file = file.path('Output', 'Tables', 'test_CX.csv'), append = TRUE)
+  write.table(tab1, file = file.path('Output', 'Tables', 'test_CX.csv'), append = TRUE)
 }
 tab01;tab05;tab1
 
@@ -123,10 +111,10 @@ tab10 <- tab_predict_region(df_pred10)
 tab20 <- tab_predict_region(df_pred20)
 tab33 <- tab_predict_region(df_pred33)
 if (write_output){
-  write.table(tab05, file = file.path('Output', 'Tables', 'PredictionSets', 'test_ISUP.csv'))
-  write.table(tab10, file = file.path('Output', 'Tables', 'PredictionSets', 'test_ISUP.csv'), append = TRUE)
-  write.table(tab20, file = file.path('Output', 'Tables', 'PredictionSets', 'test_ISUP.csv'), append = TRUE)
-  write.table(tab33, file = file.path('Output', 'Tables', 'PredictionSets', 'test_ISUP.csv'), append = TRUE)
+  write.table(tab05, file = file.path('Output', 'Tables', 'test_ISUP.csv'))
+  write.table(tab10, file = file.path('Output', 'Tables', 'test_ISUP.csv'), append = TRUE)
+  write.table(tab20, file = file.path('Output', 'Tables', 'test_ISUP.csv'), append = TRUE)
+  write.table(tab33, file = file.path('Output', 'Tables', 'test_ISUP.csv'), append = TRUE)
 }
 tab05;tab10;tab20;tab33
 grid.arrange(cx, isup, ncol = 2)
@@ -158,8 +146,8 @@ predgroup20 <- predgroups(df_pred20)
 predgroup33 <- predgroups(df_pred33)
 
 if (write_output){
-  write.table(predgroup20, file = file.path('Output', 'Tables', 'PredictionSets', 'predgroups_TEST.csv'))
-  write.table(predgroup33, file = file.path('Output', 'Tables', 'PredictionSets', 'predgroups_TEST.csv'), append = TRUE)
+  write.table(predgroup20, file = file.path('Output', 'Tables', 'predgroups_TEST.csv'))
+  write.table(predgroup33, file = file.path('Output', 'Tables', 'predgroups_TEST.csv'), append = TRUE)
 }
 
 ################################## end of program #################################
