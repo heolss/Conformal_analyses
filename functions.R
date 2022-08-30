@@ -34,7 +34,6 @@ CPEfficiency = function(matPValues, testLabels, sigfLevel = 0.05)
   return(result)
 }
 
-
 ########################################################################################
 # Computes error rate of a conformal predictor, which is defined as
 # the ratio of predictions with missing true class lables over the size of the testset
@@ -60,59 +59,6 @@ CPErrorRate = function(matPValues, testLabels, sigfLevel = 0.05)
 }
 
 ########################################################################################
-# Computes observed fuzziness, which is defined as
-# the sum of all p-values for the incorrect class labels.
-########################################################################################
-CPObsFuzziness = function(matPValues, testLabels)
-{
-  if (is.null(matPValues) || is.null(testLabels)){
-    stop("\n 'matPValues' and 'testLabels' are required as input\n")
-  }
-  
-  nrTestCases = length(testLabels)
-  
-  sumPValues = 0
-  for(indxTestSet in 1:nrTestCases)
-  {
-    exclude = testLabels[indxTestSet] #exclude the p-value of the true label
-    sumPValues = sumPValues + sum(matPValues[indxTestSet, -exclude])
-  }
-  result = sumPValues/nrTestCases
-  return(result)
-}
-
-########################################################################################
-# Computes the deviation from exact validity as the Euclidean norm of
-# the difference of the observed error and the expected error
-########################################################################################
-CPValidity = function(matPValues = NULL, testLabels = NULL)
-{
-  if (is.null(matPValues) || is.null(testLabels)){
-    stop("\n 'matPValues' and 'testLabels' are required as input\n")
-  }
-  
-  signifSet = seq(.01, .99, by=.01) #significance level set
-  
-  nrTestCases = length(testLabels)
-  errAtSignif = rep(0, length(signifSet))
-  
-  for(indx in 1: length(signifSet)){
-    signifTest = (matPValues  > signifSet[indx])*1
-    
-    err = 0
-    for(i in 1:nrTestCases)
-    {
-      err = err + ( (signifTest[i, testLabels[i]] == 0) * 1 )
-    }
-    err = err/nrTestCases
-    errAtSignif[indx] = (err - signifSet[indx])^2
-  }
-  
-  result = sqrt(sum(errAtSignif))
-  return(result)
-}
-
-########################################################################################
 ## Compute conformity scores and P-values: helper function
 ########################################################################################
 computeConformityScores = function(calibrationSet = NULL)
@@ -130,7 +76,7 @@ computeConformityScores = function(calibrationSet = NULL)
   
   nrLabels = ncol(predProb) # number of class labels
   
-  MCListConfScores = list() #Moderian Class wise List of conformity scores
+  MCListConfScores = list() #Mondrian Class wise List of conformity scores
   for(i in 1:nrLabels)
   {
     classMembers = which(calibLabels == i)
@@ -264,21 +210,7 @@ generate_vars <- function(outcome, testdata){
     # Test Set
     df_test <- select(df_test, c(cx, pr_ben, pr_cx))
     df_test$cx <- ifelse(df_test$cx == 0, 1, 2)
-    # Test Set
-    df_ks1 <- select(df_ks1, c(cx, pr_ben, pr_cx))
-    df_ks1$cx <- ifelse(df_ks1$cx == 0, 1, 2)
-    # CGAN
-    df_KS1_CGAN <- select(df_KS1_CGAN, c(cx, pr_ben, pr_cx))
-    df_KS1_CGAN$cx <- ifelse(df_KS1_CGAN$cx == 0, 1, 2)
-    # Outcome-Test-classes
     col_outcome <- c(1, 2)
-    # Calibrated
-    # df_calib_calibrated <- select(df_calib_calibrated, c(cx, pr_ben, pr_cx))
-    # df_calib_calibrated$cx <- ifelse(df_calib_calibrated$cx == 0, 1, 2)
-    # df_ks1_calibrated <- select(df_ks1_calibrated, c(cx, pr_ben, pr_cx))
-    # df_ks1_calibrated$cx <- ifelse(df_ks1_calibrated$cx == 0, 1, 2)
-    # df_KS1_CGAN_calibrated <- select(df_KS1_CGAN_calibrated, c(cx, pr_ben, pr_cx))
-    # df_KS1_CGAN_calibrated$cx <- ifelse(df_KS1_CGAN_calibrated$cx == 0, 1, 2)
   } 
   if (outcome == "ISUP") {
     ## make sure first column is always the label and class labels are always 1, 2, ...
@@ -288,21 +220,7 @@ generate_vars <- function(outcome, testdata){
     # Test Set
     df_test <- select(df_test, c(ISUP, X0:X5))
     df_test$ISUP <- df_test$ISUP+1
-    # KS-Data
-    df_ks1 <- select(df_ks1, c(ISUP, X0:X5))
-    df_ks1$ISUP <- df_ks1$ISUP+1
-    # CGAN
-    df_KS1_CGAN <- select(df_KS1_CGAN, c(ISUP, X0:X5))
-    df_KS1_CGAN$ISUP <- df_KS1_CGAN$ISUP+1
-    # Outcome-Test-classes
     col_outcome <- c(1, 2, 3, 4, 5, 6)
-    # Calibrated
-    # df_calib_calibrated <- select(df_calib_calibrated, c(ISUP, X0:X5))
-    # df_calib_calibrated$ISUP <- df_calib_calibrated$ISUP+1
-    # df_ks1_calibrated <- select(df_ks1_calibrated, c(ISUP, X0:X5))
-    # df_ks1_calibrated$ISUP <- df_ks1_calibrated$ISUP+1
-    # df_KS1_CGAN_calibrated <- select(df_KS1_CGAN_calibrated, c(ISUP, X0:X5))
-    # df_KS1_CGAN_calibrated$ISUP <- df_KS1_CGAN_calibrated$ISUP+1
   }
   if (outcome == "ISUP_group") {
     ## make sure first column is always the label and class labels are always 1, 2, ...
@@ -312,15 +230,7 @@ generate_vars <- function(outcome, testdata){
     # Test Set
     df_test <- select(df_test, c(ISUP, X0:X3))
     df_test$ISUP <- df_test$ISUP+1
-    # KS-Data
-    df_ks1 <- select(df_ks1, c(ISUP, X0:X3))
-    df_ks1$ISUP <- df_ks1$ISUP+1
-    # CGAN
-    df_KS1_CGAN <- select(df_KS1_CGAN, c(ISUP, X0:X3))
-    df_KS1_CGAN$ISUP <- df_KS1_CGAN$ISUP+1
-    # Outcome-Test-classes
     col_outcome <- c(1, 2, 3, 4)
-    # Calibrated
   }
   
   if (testdata == "test"){
@@ -331,21 +241,11 @@ generate_vars <- function(outcome, testdata){
     testSet = df_ks1
     testLabels <- df_ks1[, 1]
   }
-  # if (testdata == "ks_calibrated"){
-  #   testSet = df_ks1_calibrated
-  #   testLabels <- df_ks1_calibrated[, 1]
-  #   df_calib <- df_calib_calibrated
-  # }
   if (testdata == "ks_cgan"){
     testSet = df_KS1_CGAN
     testLabels <- df_KS1_CGAN[, 1]
     df_calib <- df_calib
   }
-  # if (testdata == "ks_cgan_calibrated"){
-  #   testSet = df_KS1_CGAN_calibrated
-  #   testLabels <- df_KS1_CGAN_calibrated[, 1]
-  #   df_calib <- df_calib_calibrated
-  # }
   return(list(testSet = testSet, testLabels = testLabels, df_calib = df_calib, col_outcome = col_outcome))
 }
 
@@ -380,8 +280,6 @@ df_predict_region <- function(pValues, sigfLevel, outcome){
     pred_group[sum != 0 & error == TRUE] <- 2
     pred_group[sum == 1 & error == FALSE] <- 3
     pred_group[sum > 1 & error == FALSE] <- 4
-    # pred_group <- factor(pred_group, labels = c("Empty", "Error", "Single", "Multiple"))
-    # Recode Empty predictions from error predictions
     error <- ifelse(sum == 0, FALSE, error)
     
     empty <- NA
@@ -417,90 +315,6 @@ tab_predict_region <- function(df){
     mytable[i,] <- paste(mytable[i,], " (", round( prop.table(tab_margins,2)[i,],2), ")", sep="")
   }
   return(mytable)
-}
-
-########################################################################################
-## Logistic calibration Function
-########################################################################################
-# OBS! It is possible that calibration should be performed only on k-1 groups? Remove p0?
-logistic_calibration <- function(data, outcome){
-  if (outcome == "CX"){
-    # lp1 <- with(data, log(pr_cx / (1 - pr_cx)))
-    # fit1 <- glm(cx == 1 ~ lp1, family = binomial, data = data)
-    # p1 <- predict(fit1, type = "response")
-    # # Updated Predictions with calibrated probabilities
-    # data <- data.frame(data, p1)
-    # # Normalize predictions:
-    # data <- data %>%
-    #   mutate(pr_cx = p1,
-    #          pr_ben = 1 - p1) %>%
-    #   select(-c(p1))
-    lp0 <- with(data, log(pr_ben / (1 - pr_ben)))
-    fit0 <- glm(cx == 0 ~ lp0, family = binomial, data = data)
-    p0 <- predict(fit0, type = "response")
-    lp1 <- with(data, log(pr_cx / (1 - pr_cx)))
-    fit1 <- glm(cx == 1 ~ lp1, family = binomial, data = data)
-    p1 <- predict(fit1, type = "response")
-
-    # Updated Predictions with calibrated probabilities
-    data <- data.frame(data, p0, p1)
-
-    # Normalize predictions:
-    cols <- c('p0', 'p1')
-    r_sum <- rowSums(data[cols])
-    data$p0 <- data$p0 / r_sum
-    data$p1 <- data$p1 / r_sum
-
-    data <- data %>%
-      mutate(pr_cx = p1,
-             pr_ben = p0) %>%
-      select(-c(p0, p1))
-  }
-  
-  if (outcome == "ISUP"){
-    # ISUP0
-    lp0 <- with(data, log(X0 / (1 - X0)))
-    fit0 <- glm(ISUP == 0 ~ lp0, family = binomial, data = data)
-    p0 <- predict(fit0, type = "response")
-    # ISUP1
-    lp1 <- with(data, log(X1 / (1 - X1)))
-    fit1 <- glm(ISUP == 1 ~ lp1, family = binomial, data = data)
-    p1 <- predict(fit1, type = "response")
-    # ISUP2
-    lp2 <- with(data, log(X2 / (2 - X2)))
-    fit2 <- glm(ISUP == 2 ~ lp2, family = binomial, data = data)
-    p2 <- predict(fit2, type = "response")
-    # ISUP3
-    lp3 <- with(data, log(X3 / (3 - X3)))
-    fit3 <- glm(ISUP == 3 ~ lp3, family = binomial, data = data)
-    p3 <- predict(fit3, type = "response")
-    # ISUP4
-    lp4 <- with(data, log(X4 / (4 - X4)))
-    fit4 <- glm(ISUP == 4 ~ lp4, family = binomial, data = data)
-    p4 <- predict(fit4, type = "response")
-    # ISUP5
-    lp5 <- with(data, log(X5 / (5 - X5)))
-    fit5 <- glm(ISUP == 5 ~ lp5, family = binomial, data = data)
-    p5 <- predict(fit5, type = "response")
-    
-    # Updated Predictions with calibrated probabilities
-    data <- data.frame(data, p0, p1, p2, p3, p4, p5)
-    
-    # Normalize predictions:
-    cols <- c('p0','p1','p2','p3','p4','p5')
-    r_sum <- rowSums(data[cols])
-    data$p0 <- data$p0 / r_sum
-    data$p1 <- data$p1 / r_sum
-    data$p2 <- data$p2 / r_sum
-    data$p3 <- data$p3 / r_sum
-    data$p4 <- data$p4 / r_sum
-    data$p5 <- data$p5 / r_sum
-    
-    data <- data %>%
-      mutate(X0 = p0, X1 = p1, X2 = p2, X3 = p3, X4 = p4, X5 = p5) %>% 
-      select(-c(p0:p5))
-  }
-  return(data)
 }
 
 ########################################################################################
