@@ -170,5 +170,5 @@ p_values
 
 # Save
 if (write_output){
-  write.table(p_values, file = file.path('Output', 'Tables', 'kolmogorov','p_values_kolmogorov.csv'))
+  write.table(p_values, file = file.path('Output', 'Tables', 'p_values_kolmogorov.csv'))
 }
