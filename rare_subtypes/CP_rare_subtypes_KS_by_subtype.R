@@ -21,7 +21,7 @@ library("dplyr")
 library("ggplot2")
 library("gridExtra")
 library("pROC")
-source("Programs/functions.R")
+source("functions.R")
 
 ########################################################################################
 ## Set Parameters
@@ -34,10 +34,10 @@ datasource <- 'both'
 ## Rare-subtypes
 ########################################################################################
 # df1
-df_test1 <- read.csv(file = file.path('Data', 'Derived', 'Demo', 
+df_test1 <- read.csv(file = file.path('Data', 'Demo', 
                                       'df_lars_special_cases_argmax.csv'))
 # df2
-df_test2 <- read.csv(file = file.path('Data', 'Derived', 'Demo',
+df_test2 <- read.csv(file = file.path('Data', 'Demo',
                                       'rare_subtypes_ks.csv'))
 
 ########################################################################################
@@ -77,10 +77,10 @@ if (datasource == 'test1'){
 ########################################################################################
 if (use_testsplit){
   # II. Add test-split from I.
-  df_calib <- read.csv(file = file.path('Data', 'Derived', 'Demo', 'df_test.csv'))
+  df_calib <- read.csv(file = file.path('Data', 'Demo', 'df_test.csv'))
   df_calib <- filter(df_calib, calibset == 1)
 } else {
-  df_calib <- read.csv(file = file.path('Data', 'Derived', 'Demo', 'df_test.csv'))
+  df_calib <- read.csv(file = file.path('Data', 'Demo', 'df_test.csv'))
 }
 
 ########################################################################################
