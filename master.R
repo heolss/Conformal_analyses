@@ -40,15 +40,14 @@ source("STHLM3_APERIO/paired_hamamatsu.R")
 tab01;tab20;tab33
 grid.arrange(cx, isup, ncol = 2)
 
-# 9. Prediction-regions by Imagebase-ISUP-mode and coverage by individual Imagebase-pathologist-votes
-source("Programs/CP_LO_argmaxvoting/imagebase_voting_by_predgroups.R")
-t1; t2; summary(df$Frequency)
-
-# 10. Kolmogorov-Smirnov test of equality of the distribution of the predictions in the calibration set and 
+# 9. Kolmogorov-Smirnov test of equality of the distribution of the predictions in the calibration set and 
 # each test dataset to test the validity of the prediction regions. 
 # The null hypothesis was that the samples are drawn from the same distribution.
 source("CP_LO_argmaxvoting/kolmogorov_pvalues.R")
 p_values
 
+# 10. Prediction-regions by Imagebase-ISUP-mode and coverage by individual Imagebase-pathologist-votes
+source("CP_LO_argmaxvoting/imagebase_voting_by_predgroups.R")
+t1; t2; summary(df$Frequency)
 
 ################################## end of program #################################

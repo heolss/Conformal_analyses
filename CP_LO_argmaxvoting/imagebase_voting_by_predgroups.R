@@ -10,37 +10,29 @@
 ########################################################################################
 rm(list=ls())
 
+set.seed(12)
+
 library("dplyr")
 library("tidyr")
 library("ggplot2")
 library("gridExtra")
-source("Programs/functions.R")
+source("functions.R")
 library("reshape2")
 
 ########################################################################################
-# Run Conformal prediction on Imagebase data and recode variables
-########################################################################################
-source("Programs/CP_LO_argmaxvoting/CP_LO_IMAGEBASE.R")
+## Run Conformal prediction on Imagebase data and recode variables
 
-########################################################################################
 # Generate Table of predgroups by ISUP
-
 # Input to # Combine with Imbase-panel below
 ########################################################################################
-# multi33 <- predgroups(df_pred33)
-# multi20 <- predgroups(df_pred20)
-# DF_PRED <- df_pred33
-DF_PRED <- df_pred20
+source("CP_LO_argmaxvoting/CP_LO_IMAGEBASE.R")
+# DF_PRED <- df_pred20
+DF_PRED <- df_pred33
 
 ########################################################################################
 ## Imagebase data
 ########################################################################################
-# path <- "/Users/henrikolsson1/Desktop/Sandbox/Transport/Imagebase"
-path <- "/home/henols/Desktop/CP-LO"
-imagebase <- read.csv(file = file.path('Data', 'Derived', 'CP_LO', 'FinalResultsProstate_with_AI_anonymized.csv'))
-imagebase$Path.no <- as.character(imagebase$Path.no)
-# Exclude one pathologist that did not rate every biopsy in Imagebase-data
-imagebase <- select(imagebase, -c(IB6))
+imagebase <- read.csv(file = file.path('Data', 'Demo', 'df_imagebase.csv'))
 
 ########################################################################################
 ## Relative frequency of ISUP-group-votes by biopsy-core
@@ -148,12 +140,15 @@ t1 <- mytable
 t2 <- df %>%
   group_by(true_cols) %>%
   summarise(iqr = round(IQR(Frequency), 2), Frequency = round(median(Frequency), 2))
-t3 <- cbind(t1, t2)
+t1; t2
+
+# Overall coverage - frequency of votes for our prediction-sets
+coverage <- summary(df$Frequency)['Median'][[1]]
 
 if (write_output){
-  write.table(t1, file = file.path('Output', 'Tables', 'PredictionSets', 'predgroup_imb_voting.csv'))
-  write.table(t2, file = file.path('Output', 'Tables', 'PredictionSets', 'predgroup_imb_voting.csv'), append = TRUE)
+  write.table(t1, file = file.path('Output', 'Tables', 'predgroup_imb_voting.csv'))
+  write.table(t2, file = file.path('Output', 'Tables', 'predgroup_imb_voting.csv'), append = TRUE)
+  write.table(coverage, file = file.path('Output', 'Tables', 'predgroup_imb_voting.csv'), append = TRUE)
 }
 
 ################################## end of program #################################
-
