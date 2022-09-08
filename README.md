@@ -22,4 +22,4 @@ We provide anonymized demo versions of all the datasets that are included in the
 - An output folder where tables and figures are collected. 
 
 # System requirements
-All statistical analyses were performed using R, version 4.0.1 (R Foundation). R-packages dplyr, tidyr, ggplo2, gridExtra and reshape2 were utilized for the analysis.
+All statistical analyses were performed using R, version 4.0.0 (R Foundation). R-packages dplyr, tidyr, ggplo2, gridExtra and reshape2 were utilized for the analysis.
