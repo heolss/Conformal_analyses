@@ -1,5 +1,5 @@
 # Overview
-Demo versions of the datasets and the code that are used for the analyses of the study “Estimating diagnostic uncertainty in artificial intelligence assisted pathology using conformal prediction”. The repo can be used to replicate the core tables and figures in the manuscript.
+Demo versions of the datasets and the code that are used for the analyses of the study *“Estimating diagnostic uncertainty in artificial intelligence assisted pathology using conformal prediction”.* The repo can be used to replicate the core tables and figures in the manuscript.
 
 
 # Abstract
@@ -16,11 +16,12 @@ Anonymized demo versions of all the datasets that are included in the manuscript
 - Contains the main functions that are used for the main analysis of the paper
 
 ### master.R
-- The analyses for the study are divided into different sub-scripts that are used to produce the different tables and figures of the manuscript.
-- The master-script collects all sub-scripts together to provide an overview of the analysis. This can be used to run each sub-script / analysis in a serial way that aims to reproduce the structure of the analysis of how the results are presented in the manuscript.
+- Each sub part of the analysis is compiled in a separate sub-script.
+- The master.R is the main script that collects all sub-scripts together and provides an overview of the analysis. Each sub-script can be run separately in a serial way from within the master-script.
+- Running the full master-script aims to reproduce all the quantitative results in the manuscript.
 
 ## Output
 - An output folder where tables and figures are collected. 
 
-# System requirements
-All statistical analyses were performed using R, version 4.0.0 (R Foundation). R-packages dplyr, tidyr, ggplo2, gridExtra, and reshape2 were utilized for the analysis.
+# System requirements and installation
+All statistical analyses were performed using R, version 4.0.0 (R Foundation for Statistical Computing, Vienna, Austria. URL https://www.R-project.org/.). R-packages dplyr, tidyr, ggplo2, gridExtra, and reshape2 were utilized for the analysis.
