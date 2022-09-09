@@ -15,9 +15,11 @@ Anonymized demo versions of all the datasets that are included in the manuscript
 ### functions.R
 - Contains the main functions that are used for the main analysis of the paper
 
+### analysis
+- Each sub part of the analysis is compiled in a separate analysis-script. All analysis-script are stored in analysis-folder.
+
 ### master.R
-- Each sub part of the analysis is compiled in a separate sub-script.
-- The master.R is the main script that collects all sub-scripts together and provides an overview of the analysis. Each sub-script can be run separately in a serial way from within the master-script.
+- The master.R is the main script that collects all analysis-scripts together and provides an overview of the analysis. Each analysis-script can be run separately in a serial way from within the master-script.
 - Running the full master-script aims to reproduce all the quantitative results in the manuscript.
 
 ## Output
