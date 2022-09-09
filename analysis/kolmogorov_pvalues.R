@@ -7,6 +7,13 @@ library("gridExtra")
 source("functions.R")
 
 ########################################################################################
+## Set Parameters
+########################################################################################
+normalize <- FALSE
+write_output <- FALSE 
+use_testsplit <- FALSE
+
+########################################################################################
 ## Test
 ########################################################################################
 # II. Add test-split from I.
@@ -161,10 +168,37 @@ df <- filter(df, testLabels == 2)
 df <- df[!duplicated(df$X2),]
 p_paired_hamamatsu <- ks.test(df$X2, 'punif', 0, 1)$p.value
 
+
+########################################################################################
+## Stavanger - Test set 5
+########################################################################################
+df_test <- read.csv(file = file.path('Data', 'Demo', 'stavanger.csv'))
+## Add STHLM3_APERIO Calibration set
+df_calib <- read.csv(file = file.path('Data', 'Demo', 'sthlm3_aperio_calib.csv'))
+# df_calib <- filter(df_calib, ext == '.svs')
+
+## Generate prediction-regions for CX
+data <- generate_vars(outcome = "CX", testdata = "test")
+testSet <- data$testSet
+testLabels <- data$testLabels
+calibset <- data$df_calib
+col_outcome <- data$col_outcome
+# ICP P-values: Class-conditional Inductive conformal classifier for multi-class problems
+pValues_cx <- ICPClassification(testSet = testSet, calibSet = calibset)
+
+## P-value
+df <- data.frame(testLabels, pValues_cx)
+df <- filter(df, testLabels == 2)
+# Only unique - ties not allowed
+df <- df[!duplicated(df$X2),]
+p_stavanger <- ks.test(df$X2, 'punif', 0, 1)$p.value
+
+
 ########################################################################################
 ## Combine
 ########################################################################################
-p_values <- rbind(p_test, p_imagebase, p_ks, p_rare_subtypes, p_paired_aperio, p_paired_hamamatsu)
+p_values <- rbind(p_test, p_imagebase, p_ks, p_rare_subtypes, p_paired_aperio, 
+                  p_paired_hamamatsu, p_stavanger)
 p_values <- data.frame(p_values)
 p_values
 
