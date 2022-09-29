@@ -1,3 +1,8 @@
+########################################################################################
+## Description:  
+# Analysis - External scanner and external pathology laboratory - Test set 5
+# Author Henrik Olsson
+########################################################################################
 
 rm(list=ls())
 

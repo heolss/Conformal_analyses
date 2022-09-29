@@ -1,5 +1,5 @@
 ########################################################################################
-## Description: Cancer detection on rare prostate morphologies (Test set 5) in CP MS
+## Description: Cancer detection on rare prostate morphologies (Test set 6) in CP MS
 
 ## Test data 1: Containing 27 slides scanned in Uppsala containing of special rare morphologies. 
 # Scanning round #1 ('lars_special_cases')

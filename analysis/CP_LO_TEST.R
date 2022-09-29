@@ -1,3 +1,7 @@
+########################################################################################
+## Description:  Analysis and Results - Baseline test set - Test-set 1
+# Author Henrik Olsson
+########################################################################################
 
 rm(list=ls())
 
@@ -83,6 +87,12 @@ if (write_output){
   write.table(tab01, file = file.path('Output', 'Tables', 'test_CX.csv'))
   write.table(tab05, file = file.path('Output', 'Tables', 'test_CX.csv'), append = TRUE)
   write.table(tab1, file = file.path('Output', 'Tables', 'test_CX.csv'), append = TRUE)
+  # Cancer-detection plot
+  cx <- cx + theme(text = element_text(size = 17))
+  cx <- cx + ggtitle("")
+  ggsave(filename = file.path('Output', 'Figures', 'cx_test.png'), cx, 
+         width = 6, 
+         height = 6)
 }
 tab01;tab05;tab1
 

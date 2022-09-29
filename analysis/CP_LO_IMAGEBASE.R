@@ -1,3 +1,7 @@
+########################################################################################
+## Description:  Analysis and Results - Imagebase - Test set 2
+# Author Henrik Olsson
+########################################################################################
 
 rm(list=ls())
 
@@ -73,9 +77,9 @@ tab01 <- tab_predict_region(df_pred01)
 tab05 <- tab_predict_region(df_pred05)
 tab1 <- tab_predict_region(df_pred1)
 if (write_output){
-  write.table(tab01, file = file.path('Output', 'Tables', 'iamgebase_CX.csv'))
-  write.table(tab05, file = file.path('Output', 'Tables', 'iamgebase_CX.csv'), append = TRUE)
-  write.table(tab1, file = file.path('Output', 'Tables', 'iamgebase_CX.csv'), append = TRUE)
+  write.table(tab01, file = file.path('Output', 'Tables', 'imagebase_CX.csv'))
+  write.table(tab05, file = file.path('Output', 'Tables', 'imagebase_CX.csv'), append = TRUE)
+  write.table(tab1, file = file.path('Output', 'Tables', 'imagebase_CX.csv'), append = TRUE)
 }
 tab01;tab05;tab1
 

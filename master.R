@@ -1,3 +1,15 @@
+########################################################################################
+## Description:  Demo versions of the datasets and the code that are used for the analyses of the study: 
+# “Estimating diagnostic uncertainty in artificial intelligence assisted pathology using conformal prediction”. 
+# The repo can be used to replicate the core tables and figures in the manuscript.
+
+## The master.R is the main script that collects all analysis-scripts together and 
+# provides an overview of the analysis. Each analysis-script can be run separately in a 
+# serial way from within the master-script.
+
+# Author Henrik Olsson
+########################################################################################
+
 
 rm(list=ls())
 
@@ -25,19 +37,17 @@ grid.arrange(cx, isup, ncol = 2)
 
 # 5. Results - CP on Rare prostate tissue morphology by subtype - Test set 6
 source("analysis/CP_rare_subtypes_KS_by_subtype.R")
-tab01;tab05;tab1
+tab01
 cx
 
 # 6. Results - AI without CP on Rare prostate tissue morphology by subtype - Test set 6
 source("analysis/AI_rare_subtypes_KS_by_subtypes.R")
 AI_CX_subtype
 
-# 8. Results - External scanner evaluted on 448 paired slides (Aperio & Hamamatsu) - Test set 3
+# 8. Results - External scanner evaluted on 449 paired slides (Aperio & Hamamatsu) - Test set 3
 source("analysis/paired_aperio.R")
-tab01;tab20;tab33
 grid.arrange(cx, isup, ncol = 2)
 source("analysis/paired_hamamatsu.R")
-tab01;tab20;tab33
 grid.arrange(cx, isup, ncol = 2)
 
 # 9. Results - External scanner and external pathology laboratory - Test set 5

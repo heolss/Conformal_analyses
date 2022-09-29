@@ -1,3 +1,8 @@
+########################################################################################
+## Description:  
+# Analysis - External scanner evaluted on 449 paired slides (Aperio & Hamamatsu) - Test set 3
+# Author Henrik Olsson
+########################################################################################
 
 rm(list=ls())
 

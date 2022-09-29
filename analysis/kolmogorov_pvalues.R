@@ -1,3 +1,13 @@
+########################################################################################
+## Description:  
+# Kolmogorov-Smirnov test of equality of the distribution of the predictions in the calibration set and 
+# each test dataset to test the validity of the prediction regions. 
+# The null hypothesis being that the samples are drawn from the same distribution.
+# Author Henrik Olsson
+########################################################################################
+
+
+
 rm(list=ls())
 
 library("knitr")
