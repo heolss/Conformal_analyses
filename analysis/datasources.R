@@ -26,8 +26,6 @@ rare_subtypes1 <- read.csv(file = file.path('Data',  'Demo',
 # df2
 rare_subtypes2 <- read.csv(file = file.path('Data',  'Demo',
                                       'rare_subtypes_ks.csv'))
-# Coding ISUP - Check with Lars !!!!!!
-rare_subtypes2$ISUP <- with(rare_subtypes2, ifelse(is.na(ISUP) & cx == 0, 0, ISUP))
 
 # select matching variables
 keepvars <- c('pr_cx', 'pr_ben', "cl_slide_cx", 'ISUP', 'cx', 'subtype')
