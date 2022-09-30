@@ -65,4 +65,12 @@ p_values
 source("analysis/imagebase_voting_by_predgroups.R")
 t1; t2; summary(df$Frequency)
 
+# 12. Kolmogorov-Smirnov test of equality for the distribution of the predictions in the calibration set 
+# and each test dataset. How many observations that would be needed in order to detect 
+# systematic differences between training data and each external test data.
+source("analysis/BASECASE_sample_detect.R"); BASECASE_detect_drift
+source("analysis/HAMA_sample_detect.R"); HAMA_detect_drift
+source("analysis/Karolinska_sample_detect.R"); KS_detect_drift
+source("analysis/Stavanger_sample_detect.R"); STAVANGER_detect_drift
+
 ################################## end of program #################################
